@@ -107,4 +107,7 @@ public class User {
     		this.setPIN(in);
     	}
     }
+	public long getPIN() {
+		return pin;
+	}
 }

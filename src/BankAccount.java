@@ -21,7 +21,12 @@ public class BankAccount {
         this.accountHolder = accountHolder;
         this.accountNumber = accountNum++;
     }
-    public BankAccount(Scanner in) {
+    BankAccount(User accountHolder, long accountNumber, double balance) {
+        this.accountHolder = accountHolder;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
+    BankAccount(Scanner in) {
     	accountHolder = new User(in);
     }
     
@@ -55,5 +60,8 @@ public class BankAccount {
     
     User getUser() {
         return accountHolder;
-    }    
+    }
+	public String getString() {
+		return accountNumber + "" + accountHolder.getPIN() + balanc; //TODO
+	}    
 }
