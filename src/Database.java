@@ -8,32 +8,40 @@ import java.io.*;
  */
 
 public class Database {
-	
+
 	private File data;
-	private BufferedReader br;
-	private BufferedWriter fw;
-	
-	public Database(File file) throws IOException {
+
+	Database(File file) {
 		this.data = file;
-		br = new BufferedReader(new FileReader(this.data));
-		fw = new BufferedWriter(new FileWriter(this.data.getAbsoluteFile(), true));
 	}
-	
-	public void addAccount(BankAccount account) {
-		fw.append(account.getString());
-	}
-	
-	public BankAccount getAccount(long accountNumber, int pin) throws IOException {
-		String line;
-		while ((line = br.readLine()) != null) {
-			if (line.substring(0, 13).equals(accountNumber + "" + pin)) {
-				return new BankAccount();
-			}
+
+	void addAccount(BankAccount account) throws IOException {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.data.getAbsoluteFile(), true))){
+			bw.append(account.getString());
 		}
-		return null;
 	}
-	
-	protected void finalize() throws Throwable {
-		br.close();
+
+	BankAccount getAccount(long accountNumber, int pin) throws IOException {
+		try (BufferedReader br = new BufferedReader(new FileReader(this.data))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (line.substring(0, 13).equals(accountNumber + "" + pin)) {
+					return new BankAccount(line);
+				}
+			}
+			return null;
+		}
+	}
+
+	void updateAccount(BankAccount account) throws IOException {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.data.getAbsoluteFile(), false))){
+			// TODO
+		}
+	}
+
+	void deleteAccount(BankAccount account) throws IOException {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.data.getAbsoluteFile(), false))){
+			// TODO
+		}
 	}
 }
