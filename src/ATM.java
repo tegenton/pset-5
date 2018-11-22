@@ -1,3 +1,6 @@
+import java.io.*;
+import java.util.Scanner;
+
 /**
  * Just like last time, the ATM class is responsible for managing all
  * of the user interaction. This means login procedures, displaying the
@@ -11,7 +14,23 @@
  */
 
 public class ATM {
-	public static void main(String[] args) {
 
+	private BankAccount currentAccount = null;
+	private Database database;
+	private static Scanner in = new Scanner(System.in);
+
+	ATM(File data) {
+		database = new Database(data);
+	}
+
+	public static void main(String[] args) throws IOException {
+		ATM atm = new ATM(new File("")); // TODO: path to file
+		while (atm.currentAccount == null) {
+			System.out.println("Enter your account number:");
+			long testNum = Long.getLong(in.nextLine());
+			System.out.println("Enter your PIN:");
+			int testPin = Integer.getInteger(in.nextLine());
+			atm.currentAccount = atm.database.getAccount(testNum, testPin);
+		}
 	}
 }
