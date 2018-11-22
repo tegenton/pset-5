@@ -1,3 +1,5 @@
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
 
 /**
@@ -11,7 +13,7 @@ public class Database {
 
 	private File data;
 
-	Database(File file) {
+	Database(@NotNull File file) {
 		this.data = file;
 	}
 

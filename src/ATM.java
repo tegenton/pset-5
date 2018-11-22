@@ -1,4 +1,7 @@
+import com.sun.istack.internal.NotNull;
+
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 /**
@@ -19,18 +22,112 @@ public class ATM {
 	private Database database;
 	private static Scanner in = new Scanner(System.in);
 
-	ATM(File data) {
+	ATM(@NotNull File data) throws IOException {
 		database = new Database(data);
+		while (!this.loginScreen());
 	}
 
-	public static void main(String[] args) throws IOException {
-		ATM atm = new ATM(new File("")); // TODO: path to file
-		while (atm.currentAccount == null) {
-			System.out.println("Enter your account number:");
-			long testNum = Long.getLong(in.nextLine());
-			System.out.println("Enter your PIN:");
-			int testPin = Integer.getInteger(in.nextLine());
-			atm.currentAccount = atm.database.getAccount(testNum, testPin);
+	private boolean loginScreen() throws IOException {
+		System.out.println("What would you like to do?\n" +
+				"1) Log in to an existing account\n" +
+				"2) Open a new account");
+		switch (in.nextLine().charAt(0)) {
+			case '1':
+				this.login();
+				break;
+			case '2':
+				this.createAccount();
+				break;
+			default:
+				return false;
 		}
+		return true;
+	}
+
+	private void login() throws IOException {
+		while (this.currentAccount == null) {
+			System.out.println("Enter your account number:");
+			long testNum = in.nextLong();
+			System.out.println("Enter your PIN:");
+			Integer testPin = in.nextInt();
+			in.nextLine();
+			this.currentAccount = this.database.getAccount(testNum, testPin);
+			if (this.currentAccount == null)
+				System.out.println("Incorrect information, please try again");
+		}
+	}
+
+	private void createAccount() throws IOException {
+		this.currentAccount = new BankAccount(in);
+		database.addAccount(this.currentAccount);
+	}
+
+	public void menu() throws IOException {
+		while (!this.menu('a'));
+	}
+
+	private boolean menu(char a) throws IOException {
+		System.out.println("What would you like to do?\n" +
+				"1) Deposit funds\n" +
+				"2) Withdraw funds\n" +
+				"3) Transfer funds\n" +
+				"4) View balance\n" +
+				"5) View personal information\n" +
+				"6) Update personal information\n" +
+				"7) Close account\n" +
+				"8) Logout");
+		switch (in.nextLine().charAt(0)) {
+			case '1':
+				System.out.println("How much would you like to deposit?");
+				try {
+					this.currentAccount.deposit(in.nextDouble());
+				}
+				catch (InvalidParameterException e) {
+					System.out.println(e.getMessage());
+				}
+				in.nextLine();
+				break;
+			case '2':
+				System.out.println("How much would you like to withdraw?");
+				try {
+					this.currentAccount.withdraw(in.nextDouble());
+				}
+				catch (InvalidParameterException e) {
+					System.out.println(e.getMessage());
+				}
+				in.nextLine();
+				break;
+			case '3':
+				System.out.println("What account will you transfer to?");
+				System.out.println("How much would you like to transfer?");
+
+				try {
+					this.currentAccount.deposit(in.nextDouble());
+				}
+				catch (InvalidParameterException e) {
+					System.out.println(e.getMessage());
+				}
+				in.nextLine();
+				break;
+			case '4':
+				break;
+			case '5':
+				break;
+			case '6':
+				break;
+			case '7':
+				System.out.println("Closing account");
+				this.currentAccount.close();
+				//TODO: should there be a break here? does closing auto log out?
+			case '8':
+				System.out.println("Logging out");
+				this.database.updateAccount(this.currentAccount);
+				this.currentAccount = null;
+				return true;
+			default:
+				System.out.println("Invalid option");
+				break;
+		}
+		return false;
 	}
 }

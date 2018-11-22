@@ -79,6 +79,10 @@ public class BankAccount {
 		return accountHolder;
 	}
 
+	void close() {
+		this.status = 'N';
+	}
+
 	public String getString() {
 		String temp = String.format("%9o", accountNumber);
 		temp += String.format("%4f", accountHolder.getPIN());
