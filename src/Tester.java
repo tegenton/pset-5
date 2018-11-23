@@ -21,6 +21,9 @@ public class Tester {
 		 */
 
 		ATM atm = new ATM(null);
-		atm.menu();
+		while (atm.hasAccount()) {
+			atm.menu();
+			atm.loginScreen();
+		}
 	}
 }

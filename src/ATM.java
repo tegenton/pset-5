@@ -27,10 +27,11 @@ public class ATM {
 		while (!this.loginScreen());
 	}
 
-	private boolean loginScreen() throws IOException {
+	public boolean loginScreen() throws IOException {
 		System.out.println("What would you like to do?\n" +
 				"1) Log in to an existing account\n" +
-				"2) Open a new account");
+				"2) Open a new account\n" +
+                "3) Exit");
 		switch (in.nextLine().charAt(0)) {
 			case '1':
 				this.login();
@@ -38,6 +39,8 @@ public class ATM {
 			case '2':
 				this.createAccount();
 				break;
+            case '3':
+                return true;
 			default:
 				return false;
 		}
@@ -62,11 +65,11 @@ public class ATM {
 		database.addAccount(this.currentAccount);
 	}
 
-	public void menu() throws IOException {
+	public void menu() {
 		while (!this.menu('a'));
 	}
 
-	private boolean menu(char a) throws IOException {
+	private boolean menu(char a) {
 		System.out.println("What would you like to do?\n" +
 				"1) Deposit funds\n" +
 				"2) Withdraw funds\n" +
@@ -99,17 +102,21 @@ public class ATM {
 				break;
 			case '3':
 				System.out.println("What account will you transfer to?");
+				long accountNum = in.nextLong();
+				System.out.println("What is the account's PIN?");
+				int pin = in.nextInt();
 				System.out.println("How much would you like to transfer?");
-
+				double amount = in.nextDouble();
 				try {
-					this.currentAccount.deposit(in.nextDouble());
+					this.currentAccount.transfer(database.getAccount(accountNum, pin), amount);
 				}
-				catch (InvalidParameterException e) {
+				catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
 				in.nextLine();
 				break;
 			case '4':
+			    System.out.println("Current balance is: $" + currentAccount.getBalance());
 				break;
 			case '5':
 				break;
@@ -121,7 +128,12 @@ public class ATM {
 				//TODO: should there be a break here? does closing auto log out?
 			case '8':
 				System.out.println("Logging out");
-				this.database.updateAccount(this.currentAccount);
+                try {
+                    this.database.updateAccount(this.currentAccount);
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
 				this.currentAccount = null;
 				return true;
 			default:
@@ -130,4 +142,8 @@ public class ATM {
 		}
 		return false;
 	}
+
+    public boolean hasAccount() {
+	    return (this.currentAccount != null);
+    }
 }
