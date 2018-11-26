@@ -1,8 +1,6 @@
-import com.sun.istack.internal.NotNull;
-
 import java.io.*;
 import java.security.InvalidParameterException;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Just like last time, the ATM class is responsible for managing all
@@ -22,7 +20,7 @@ public class ATM {
 	private Database database;
 	private static Scanner in = new Scanner(System.in);
 
-	ATM(@NotNull File data) throws IOException {
+	ATM(File data) throws IOException {
 		database = new Database(data);
 		while (!this.loginScreen());
 	}
@@ -52,7 +50,7 @@ public class ATM {
 			System.out.println("Enter your account number:");
 			long testNum = in.nextLong();
 			System.out.println("Enter your PIN:");
-			Integer testPin = in.nextInt();
+			int testPin = in.nextInt();
 			in.nextLine();
 			this.currentAccount = this.database.getAccount(testNum, testPin);
 			if (this.currentAccount == null)
@@ -62,7 +60,7 @@ public class ATM {
 
 	private void createAccount() throws IOException {
 		this.currentAccount = new BankAccount(in);
-		database.addAccount(this.currentAccount);
+		database.createAccount(this.currentAccount);
 	}
 
 	public void menu() {
@@ -78,7 +76,7 @@ public class ATM {
 				"5) View personal information\n" +
 				"6) Update personal information\n" +
 				"7) Close account\n" +
-				"8) Logout");
+				"8) Save Changes and Logout");
 		switch (in.nextLine().charAt(0)) {
 			case '1':
 				System.out.println("How much would you like to deposit?");
@@ -98,6 +96,9 @@ public class ATM {
 				catch (InvalidParameterException e) {
 					System.out.println(e.getMessage());
 				}
+				catch (InputMismatchException e) {
+					System.out.println("Not a valid amount");
+				}
 				in.nextLine();
 				break;
 			case '3':
@@ -106,12 +107,17 @@ public class ATM {
 				System.out.println("What is the account's PIN?");
 				int pin = in.nextInt();
 				System.out.println("How much would you like to transfer?");
-				double amount = in.nextDouble();
 				try {
-					this.currentAccount.transfer(database.getAccount(accountNum, pin), amount);
+					double amount = in.nextDouble();
+					try {
+						this.currentAccount.transfer(database.getAccount(accountNum, pin), amount);
+					}
+					catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
 				}
-				catch (Exception e) {
-					System.out.println(e.getMessage());
+				catch (InputMismatchException e) {
+					System.out.println("Not a valid amount");
 				}
 				in.nextLine();
 				break;
@@ -119,13 +125,14 @@ public class ATM {
 			    System.out.println("Current balance is: $" + currentAccount.getBalance());
 				break;
 			case '5':
+				this.currentAccount.getUser().printInfo();
 				break;
 			case '6':
+				this.currentAccount.getUser().updateInfo(in);
 				break;
 			case '7':
 				System.out.println("Closing account");
 				this.currentAccount.close();
-				//TODO: should there be a break here? does closing auto log out?
 			case '8':
 				System.out.println("Logging out");
                 try {

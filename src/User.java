@@ -25,12 +25,12 @@ public class User {
 
 	User (String name, String phone, String address, String city, String zip, String state, String birthday, int pin) {
 		int space = name.indexOf(',');
-		this.fname = name.substring(space + 2, name.length() - 1);
-		this.lname = name.substring(0, space - 1);
-		this.phone = phone;
-		this.address = address;
-		this.city = city;
-		this.state = state;
+		this.lname = name.substring(space + 2, name.length() - 1).trim();
+		this.fname = name.substring(0, space).trim();
+		this.phone = phone.trim();
+		this.address = address.trim();
+		this.city = city.trim();
+		this.state = state.trim();
 		this.zip = zip;
 		this.birthday = birthday;
 		this.pin = pin;
@@ -120,7 +120,48 @@ public class User {
 			this.setPIN(in);
 		}
 	}
-	public long getPIN() {
+	public int getPIN() {
 		return pin;
+	}
+	public void printInfo() {
+		System.out.println("Name: " + this.getName());
+		System.out.println("SSN: " + this.getSSN());
+		System.out.println("Phone: " + this.getPhone());
+		System.out.println("Address: " + this.getAddress());
+		System.out.println("City: " + this.getCity());
+		System.out.println("State: " + this.getState());
+		System.out.println("Area Code: " + this.getZip());
+		System.out.println("Date of Birth (YYYYMMDD): " + this.getBirthday());
+	}
+
+	public boolean updateInfo(Scanner in) {
+		System.out.println("What do you want to update?\n" +
+				"1) PIN\n" +
+				"2) Phone Number\n" +
+				"3) Address");
+		switch (in.nextLine().toLowerCase().charAt(0)) {
+		case '1':
+			this.setPIN(in);
+			return true;
+		case '2':
+			System.out.println("What is your new phone number? (##########)");
+			this.setPhone(in.nextLine().trim());
+			return true;
+		case '3':
+			System.out.println("What is your new address?");
+			String addr = in.nextLine();
+			System.out.println("What is your new city?");
+			String cit = in.nextLine();
+			System.out.println("What is your new state?");
+			String stat = in.nextLine();
+			System.out.println("What is your new area code?");
+			String zi = in.nextLine();
+			
+			this.setAddress(addr, cit, stat, zi);
+			return true;
+		default:
+			System.out.println("Invalid option");
+			return false;
+		}
 	}
 }

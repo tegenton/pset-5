@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 
 /**
  * This class has only one responsibility: start the ATM program!
@@ -20,7 +20,7 @@ public class Tester {
 		 * you'll need to update the database accordingly.
 		 */
 
-		ATM atm = new ATM(null);
+		ATM atm = new ATM(new File("C:\\Users\\tegenton\\Documents\\APCS\\pset-5\\accounts-db.txt"));
 		while (atm.hasAccount()) {
 			atm.menu();
 			atm.loginScreen();

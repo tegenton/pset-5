@@ -1,10 +1,10 @@
 /**
  * Just like last time, the BankAccount class is primarily responsible
  * for depositing and withdrawing money. In the enhanced version, there
- * will be the added requirement of transfering funds between accounts.
+ * will be the added requirement of transferring funds between accounts.
  * 
  * Most of the functionality for this class should have already been
- * implemented last time. You can always reference my Github repository
+ * implemented last time. You can always reference my GitHub repository
  * for inspiration (https://github.com/rwilson-ucvts/java-sample-atm).
  */
 
@@ -15,7 +15,7 @@ public class BankAccount {
 	private double balance = 0;
 	private long accountNumber;
 	private User accountHolder;
-	private static long accountNum = 0;
+	private static long accountNum = 100000010;
 	private char status = 'Y';
 
 	BankAccount(User accountHolder) {
@@ -27,14 +27,13 @@ public class BankAccount {
 		this.accountNumber = accountNumber;
 		this.balance = balance;
 	}
-	BankAccount(Scanner in) {
-		this.accountHolder = new User(in);
-		this.accountNumber = accountNum++;
-	}
 	BankAccount(String info) {
 		int index = 0;
-		this.accountNumber = Long.getLong(info.substring(index, index += 30));
-		int pin = Integer.getInteger(info.substring(index, index += 4));
+		
+		//System.out.println(info.substring(index, index += 9));
+		
+		this.accountNumber = Long.parseLong(info.substring(index, index += 9));
+		int pin = Integer.parseInt(info.substring(index, index += 4));
 		this.balance = Double.parseDouble(info.substring(index, index += 13));
 		String name = info.substring(index, index += 32);
 		String birthday = info.substring(index, index += 8);
@@ -43,10 +42,13 @@ public class BankAccount {
 		String city = info.substring(index, index += 30);
 		String state = info.substring(index, index += 2);
 		String zip = info.substring(index, index += 5);
-		char status = info.charAt(index);
+		this.status = info.charAt(index);
 		this.accountHolder = new User(name, birthday, phone, address, city, state, zip, pin);
 	}
-
+	BankAccount(Scanner in) {
+		this.accountHolder = new User(in);
+		this.accountNumber = accountNum++;
+	}
 	void deposit(double amount) {
 		if (amount <= 0)
 			throw new InvalidParameterException("Deposit amount is too low");
@@ -96,5 +98,8 @@ public class BankAccount {
 		temp += accountHolder.getZip().substring(0,5);
 		temp += status;
 		return temp;
+	}
+	public void setUser(User user) {
+		this.accountHolder = user;
 	}
 }
