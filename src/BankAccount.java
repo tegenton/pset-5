@@ -29,13 +29,11 @@ public class BankAccount {
 	}
 	BankAccount(String info) {
 		int index = 0;
-		
-		//System.out.println(info.substring(index, index += 9));
-		
+				
 		this.accountNumber = Long.parseLong(info.substring(index, index += 9));
 		int pin = Integer.parseInt(info.substring(index, index += 4));
-		this.balance = Double.parseDouble(info.substring(index, index += 13));
-		String name = info.substring(index, index += 32);
+		this.balance = Double.parseDouble(info.substring(index, index += 15));
+		String name = info.substring(index, index += 35);
 		int birthday = Integer.parseInt(info.substring(index, index += 8));
 		String phone = info.substring(index, index += 10);
 		String address = info.substring(index, index += 30);
@@ -87,10 +85,10 @@ public class BankAccount {
 	}
 
 	public String getString() {
-		String temp = String.format("%9o", accountNumber);
+		String temp = String.format("%9d", accountNumber);
 		temp += String.format("%4d", accountHolder.getPIN());
-		temp += (String.format("%10.2f", balance).trim() + "             ").substring(0, 13);
-		temp += (accountHolder.getName() + "                              ").substring(0,32);
+		temp += (String.format("%10.2f", balance).trim() + "               ").substring(0, 15);
+		temp += accountHolder.getName();
 		temp += String.valueOf(accountHolder.getBirthday()).substring(0, 8);
 		temp += accountHolder.getPhone().substring(0,10);
 		temp += (accountHolder.getAddress() + "                              ").substring(0,30);

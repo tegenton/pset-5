@@ -24,8 +24,8 @@ public class User {
 
 	User (String name, String phone, String address, String city, String zip, String state, int birthday, int pin) {
 		int space = name.indexOf(',');
-		this.lname = name.substring(space + 2, name.length() - 1).trim();
-		this.fname = name.substring(0, space).trim();
+		this.lname = name.substring(0, 20).trim();
+		this.fname = name.substring(20, 35).trim();
 		this.phone = phone.trim();
 		this.address = address.trim();
 		this.city = city.trim();
@@ -58,7 +58,7 @@ public class User {
 	}
 
 	String getName() {
-		return (lname + "                    ").substring(0, 20) + (fname + "          ").substring(0, 10);
+		return (lname + "                    ").substring(0, 20) + (fname + "               ").substring(0, 15);
 	}
 
 	void setPhone(String phone) {
