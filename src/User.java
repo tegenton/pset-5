@@ -1,4 +1,4 @@
-/**
+/*
  * Just like last time, the User class is responsible for retrieving
  * (i.e., getting), and updating (i.e., setting) user information.
  * This time, though, you'll need to add the ability to update user
@@ -65,9 +65,6 @@ public class User {
 		return fname + ", " + lname;
 	}
 
-	void setSSN(int ssn) {
-		this.ssn = ssn;
-	}
 	int getSSN() {
 		return ssn;
 	}
@@ -123,6 +120,7 @@ public class User {
 	public int getPIN() {
 		return pin;
 	}
+
 	public void printInfo() {
 		System.out.println("Name: " + this.getName());
 		System.out.println("SSN: " + this.getSSN());

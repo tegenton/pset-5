@@ -25,7 +25,7 @@ public class ATM {
 		while (!this.loginScreen());
 	}
 
-	public boolean loginScreen() throws IOException {
+	public boolean loginScreen() {
 		System.out.println("What would you like to do?\n" +
 				"1) Log in to an existing account\n" +
 				"2) Open a new account\n" +
@@ -35,7 +35,12 @@ public class ATM {
 				this.login();
 				break;
 			case '2':
-				this.createAccount();
+				try {
+					this.createAccount();
+				}
+				catch (IOException e) {
+					System.out.println("Error writing account to file");
+				}
 				break;
             case '3':
                 return true;
@@ -45,14 +50,33 @@ public class ATM {
 		return true;
 	}
 
-	private void login() throws IOException {
+	private void login() {
+	    Long testNum;
+	    Integer testPin;
 		while (this.currentAccount == null) {
 			System.out.println("Enter your account number:");
-			long testNum = in.nextLong();
+			testNum = null;
+			try {
+			    testNum = in.nextLong();
+            }
+			catch (InputMismatchException e) {
+			    System.out.println("Invalid account number");
+				in.nextLine();
+			    continue;
+            }
 			System.out.println("Enter your PIN:");
-			int testPin = in.nextInt();
+			testPin = null;
+			try {
+			    testPin = in.nextInt();
+            }
+			catch (InputMismatchException e){
+                System.out.println("Invalid pin");
+				in.nextLine();
+                continue;
+            }
 			in.nextLine();
-			this.currentAccount = this.database.getAccount(testNum, testPin);
+			if (testNum != null && testPin != null)
+			    this.currentAccount = this.database.getAccount(testNum, testPin);
 			if (this.currentAccount == null)
 				System.out.println("Incorrect information, please try again");
 		}
@@ -128,7 +152,7 @@ public class ATM {
 				this.currentAccount.getUser().printInfo();
 				break;
 			case '6':
-				this.currentAccount.getUser().updateInfo(in);
+				while (!this.currentAccount.getUser().updateInfo(in));
 				break;
 			case '7':
 				System.out.println("Closing account");

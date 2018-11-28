@@ -12,7 +12,7 @@ public class Database {
 	private File data;
 	private File tempFile;
 
-	Database(File file) throws FileNotFoundException, IOException {
+	Database(File file) {
 		this.data = file;
 	}
 
@@ -22,7 +22,7 @@ public class Database {
 		}
 	}
 
-	BankAccount getAccount(long accountNumber, int pin) throws IOException {
+	BankAccount getAccount(long accountNumber, int pin) {
 		try (BufferedReader br = new BufferedReader(new FileReader(this.data))) {
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -30,6 +30,10 @@ public class Database {
 					return new BankAccount(line);
 				}
 			}
+			return null;
+		}
+		catch (IOException e) {
+			System.out.println("Error reading account from file");
 			return null;
 		}
 	}
@@ -40,7 +44,7 @@ public class Database {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile.getAbsoluteFile(), false))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (!line.substring(0, 13).equals(account.getAccountNumber() + "" + account.getUser().getPIN())) {
+				if (!line.substring(0, 9).equals(account.getAccountNumber() + "")) {
 					bw.write(line);
 				}
 				else {
@@ -48,7 +52,8 @@ public class Database {
 				}
 			}
 		}
-		tempFile.renameTo(data);
+		if (!tempFile.renameTo(data))
+			System.out.println("Could not update database");
 	}
 
 	void deleteAccount(BankAccount account) throws IOException {
@@ -62,6 +67,7 @@ public class Database {
 				}
 			}
 		}
-		tempFile.renameTo(data);
+		if (!tempFile.renameTo(data))
+			System.out.println("Could not delete account");
 	}
 }
