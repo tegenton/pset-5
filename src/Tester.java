@@ -10,9 +10,10 @@ public class Tester {
 	 * Main method.
 	 * 
 	 * @param args
+	 * @throws Exception 
 	 */
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
 		/*
 		 * Rather than hard coding one or more BankAccount objects, you'll need to read them in
@@ -20,7 +21,13 @@ public class Tester {
 		 * you'll need to update the database accordingly.
 		 */
 
-		ATM atm = new ATM(new File("C:\\Users\\tegenton\\Documents\\APCS\\pset-5\\accounts-db.txt"));
+		ATM atm;
+		try {
+			atm = new ATM(new File("C:\\Users\\tegenton\\Documents\\APCS\\pset-5\\accounts-db.txt"));
+		} catch (IOException e) {
+			System.out.println("Unable to find database file");
+			return;
+		}
 		while (atm.hasAccount()) {
 			atm.menu();
 			atm.loginScreen();

@@ -36,14 +36,14 @@ public class BankAccount {
 		int pin = Integer.parseInt(info.substring(index, index += 4));
 		this.balance = Double.parseDouble(info.substring(index, index += 13));
 		String name = info.substring(index, index += 32);
-		String birthday = info.substring(index, index += 8);
+		int birthday = Integer.parseInt(info.substring(index, index += 8));
 		String phone = info.substring(index, index += 10);
 		String address = info.substring(index, index += 30);
 		String city = info.substring(index, index += 30);
 		String state = info.substring(index, index += 2);
 		String zip = info.substring(index, index += 5);
 		this.status = info.charAt(index);
-		this.accountHolder = new User(name, birthday, phone, address, city, state, zip, pin);
+		this.accountHolder = new User(name, phone, address, city, zip, state, birthday, pin);
 	}
 	BankAccount(Scanner in) {
 		this.accountHolder = new User(in);
@@ -62,11 +62,12 @@ public class BankAccount {
 		else
 			throw new InvalidParameterException("Withdraw amount is too high");
 	}
-	void transfer(BankAccount receiver, double amount) {
+	BankAccount transfer(BankAccount receiver, double amount) {
 		if (receiver == null)
 			throw new InvalidParameterException("Receiving account does not exist");
 		this.withdraw(amount);
 		receiver.deposit(amount);
+		return receiver;
 	}
 
 	double getBalance() {
@@ -87,15 +88,15 @@ public class BankAccount {
 
 	public String getString() {
 		String temp = String.format("%9o", accountNumber);
-		temp += String.format("%4f", accountHolder.getPIN());
-		temp += String.format("%10.2f", balance);
-		temp += accountHolder.getName().substring(0,32);
-		temp += accountHolder.getBirthday().substring(0,8);
+		temp += String.format("%4d", accountHolder.getPIN());
+		temp += (String.format("%10.2f", balance).trim() + "             ").substring(0, 13);
+		temp += (accountHolder.getName() + "                              ").substring(0,32);
+		temp += String.valueOf(accountHolder.getBirthday()).substring(0, 8);
 		temp += accountHolder.getPhone().substring(0,10);
-		temp += accountHolder.getAddress().substring(0,30);
-		temp += accountHolder.getCity().substring(0,30);
-		temp += accountHolder.getState().substring(0,2);
-		temp += accountHolder.getZip().substring(0,5);
+		temp += (accountHolder.getAddress() + "                              ").substring(0,30);
+		temp += (accountHolder.getCity() + "                              ").substring(0,30);
+		temp += (accountHolder.getState() + "  ").substring(0,2);
+		temp += (accountHolder.getZip() + "     ").substring(0,5);
 		temp += status;
 		return temp;
 	}

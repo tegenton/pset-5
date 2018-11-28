@@ -26,7 +26,7 @@ public class Database {
 		try (BufferedReader br = new BufferedReader(new FileReader(this.data))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (line.substring(0, 13).equals(accountNumber + "" + pin)) {
+				if (line.substring(0, 13).equals(accountNumber + "" + pin) && !(line.charAt(line.length() - 1) == 'N')) {
 					return new BankAccount(line);
 				}
 			}
@@ -46,14 +46,18 @@ public class Database {
 			while ((line = br.readLine()) != null) {
 				if (!line.substring(0, 9).equals(account.getAccountNumber() + "")) {
 					bw.write(line);
+					bw.newLine();
 				}
 				else {
 					bw.write(account.getString());
+					bw.newLine();
 				}
 			}
 		}
+		data.delete();
 		if (!tempFile.renameTo(data))
 			System.out.println("Could not update database");
+		data = tempFile;
 	}
 
 	void deleteAccount(BankAccount account) throws IOException {

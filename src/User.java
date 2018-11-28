@@ -12,7 +12,6 @@
 import java.util.Scanner;
 
 public class User {
-	private int ssn;
 	private String fname;
 	private String lname;
 	private String phone;
@@ -20,10 +19,10 @@ public class User {
 	private String city;
 	private String state;
 	private String zip;
-	private String birthday;
+	private int birthday;
 	private int pin;
 
-	User (String name, String phone, String address, String city, String zip, String state, String birthday, int pin) {
+	User (String name, String phone, String address, String city, String zip, String state, int birthday, int pin) {
 		int space = name.indexOf(',');
 		this.lname = name.substring(space + 2, name.length() - 1).trim();
 		this.fname = name.substring(0, space).trim();
@@ -41,9 +40,6 @@ public class User {
 		fname = in.nextLine();
 		System.out.print("Last Name: ");
 		lname = in.nextLine();
-		System.out.print("SSN: ");
-		ssn = in.nextInt();
-		in.nextLine();
 		System.out.print("Phone (##########): ");
 		phone = in.nextLine();
 		System.out.print("Address: ");
@@ -55,18 +51,14 @@ public class User {
 		System.out.print("Area Code: ");
 		zip = in.nextLine();
 		System.out.print("Date of Birth (YYYYMMDD): ");
-		birthday = in.nextLine();
+		birthday = in.nextInt();
 		System.out.print("PIN: ");
 		pin = in.nextInt();
 		in.nextLine();
 	}
 
 	String getName() {
-		return fname + ", " + lname;
-	}
-
-	int getSSN() {
-		return ssn;
+		return (lname + "                    ").substring(0, 20) + (fname + "          ").substring(0, 10);
 	}
 
 	void setPhone(String phone) {
@@ -98,7 +90,7 @@ public class User {
 		return zip;
 	}
 
-	String getBirthday() {
+	int getBirthday() {
 		return birthday;
 	}
 
@@ -123,7 +115,6 @@ public class User {
 
 	public void printInfo() {
 		System.out.println("Name: " + this.getName());
-		System.out.println("SSN: " + this.getSSN());
 		System.out.println("Phone: " + this.getPhone());
 		System.out.println("Address: " + this.getAddress());
 		System.out.println("City: " + this.getCity());

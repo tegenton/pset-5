@@ -110,6 +110,9 @@ public class ATM {
 				catch (InvalidParameterException e) {
 					System.out.println(e.getMessage());
 				}
+				catch (InputMismatchException e) {
+					System.out.println("Invalid amount");
+				}
 				in.nextLine();
 				break;
 			case '2':
@@ -121,20 +124,34 @@ public class ATM {
 					System.out.println(e.getMessage());
 				}
 				catch (InputMismatchException e) {
-					System.out.println("Not a valid amount");
+					System.out.println("Invalid amount");
 				}
 				in.nextLine();
 				break;
 			case '3':
-				System.out.println("What account will you transfer to?");
-				long accountNum = in.nextLong();
-				System.out.println("What is the account's PIN?");
-				int pin = in.nextInt();
-				System.out.println("How much would you like to transfer?");
+				long accountNum;
+				try {
+				    accountNum = in.nextLong();
+	            }
+				catch (InputMismatchException e) {
+				    System.out.println("Invalid account number");
+					in.nextLine();
+				    break;
+	            }
+				System.out.println("Enter your PIN:");
+				int pin;
+				try {
+				    pin = in.nextInt();
+	            }
+				catch (InputMismatchException e){
+	                System.out.println("Invalid pin");
+					in.nextLine();
+					break;
+	            }
 				try {
 					double amount = in.nextDouble();
 					try {
-						this.currentAccount.transfer(database.getAccount(accountNum, pin), amount);
+						this.database.updateAccount(this.currentAccount.transfer(database.getAccount(accountNum, pin), amount));
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
@@ -150,6 +167,8 @@ public class ATM {
 				break;
 			case '5':
 				this.currentAccount.getUser().printInfo();
+				System.out.println("Press enter to continue");
+				in.nextLine();
 				break;
 			case '6':
 				while (!this.currentAccount.getUser().updateInfo(in));
@@ -163,7 +182,7 @@ public class ATM {
                     this.database.updateAccount(this.currentAccount);
                 }
                 catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Error saving account");
                 }
 				this.currentAccount = null;
 				return true;
