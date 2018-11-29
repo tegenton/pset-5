@@ -15,18 +15,13 @@ public class BankAccount {
 	private double balance = 0;
 	private long accountNumber;
 	private User accountHolder;
-	private static long accountNum = 100000010;
+	private static long accountNum;
 	private char status = 'Y';
 
-	BankAccount(User accountHolder) {
-		this.accountHolder = accountHolder;
-		this.accountNumber = accountNum++;
+	BankAccount(Database database) {
+		accountNum = database.accountNumber();
 	}
-	BankAccount(User accountHolder, long accountNumber, double balance) {
-		this.accountHolder = accountHolder;
-		this.accountNumber = accountNumber;
-		this.balance = balance;
-	}
+
 	BankAccount(String info) {
 		int index = 0;
 				

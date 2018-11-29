@@ -9,7 +9,7 @@
  * for inspiration (https://github.com/rwilson-ucvts/java-sample-atm).
  */
 
-import java.util.Scanner;
+import java.util.*;
 
 public class User {
 	private String fname;
@@ -50,10 +50,26 @@ public class User {
 		state = in.nextLine();
 		System.out.print("Area Code: ");
 		zip = in.nextLine();
-		System.out.print("Date of Birth (YYYYMMDD): ");
-		birthday = in.nextInt();
-		System.out.print("PIN: ");
-		pin = in.nextInt();
+		while (true) {
+			try {
+				System.out.print("Date of Birth (YYYYMMDD): ");
+				birthday = in.nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid birth date");
+				in.nextLine();
+			}
+		}
+		while (true) {
+			try {
+				System.out.print("PIN (4 digits): ");
+				pin = in.nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid PIN");
+				in.nextLine();
+			}
+		}
 		in.nextLine();
 	}
 

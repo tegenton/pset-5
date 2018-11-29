@@ -22,6 +22,7 @@ public class ATM {
 
 	ATM(File data) throws IOException {
 		database = new Database(data);
+		new BankAccount(database);
 		while (!this.loginScreen());
 	}
 
@@ -182,7 +183,8 @@ public class ATM {
                     this.database.updateAccount(this.currentAccount);
                 }
                 catch (Exception e) {
-                    System.out.println("Error saving account");
+                    System.out.println("Error saving account\n");
+                    return false;
                 }
 				this.currentAccount = null;
 				return true;

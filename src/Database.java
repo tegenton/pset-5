@@ -12,7 +12,10 @@ public class Database {
 	private File data;
 	private File tempFile;
 
-	Database(File file) {
+	Database(File file) throws IOException {
+		if (file == null) {
+			throw new IOException("File not found");
+		}
 		this.data = file;
 	}
 
@@ -73,5 +76,22 @@ public class Database {
 		}
 		if (!tempFile.renameTo(data))
 			System.out.println("Could not delete account");
+	}
+
+	public long accountNumber() {
+		try (BufferedReader br = new BufferedReader(new FileReader(this.data))) {
+			String line;
+			long max = 100000000;
+			while ((line = br.readLine()) != null) {
+				if (Long.parseLong(line.substring(0, 13)) > max) {
+					max = Long.parseLong(line.substring(0, 13));
+				}
+			}
+			return max;
+		}
+		catch (IOException e) {
+			System.out.println("No accounts found");
+			return 100000000;
+		}
 	}
 }

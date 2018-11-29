@@ -25,7 +25,7 @@ public class Tester {
 		try {
 			atm = new ATM(new File("C:\\Users\\tegenton\\Documents\\APCS\\pset-5\\accounts-db.txt"));
 		} catch (IOException e) {
-			System.out.println("Unable to find database file");
+			System.out.println(e.getMessage());
 			return;
 		}
 		while (atm.hasAccount()) {
