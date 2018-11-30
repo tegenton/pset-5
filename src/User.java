@@ -23,7 +23,6 @@ public class User {
 	private int pin;
 
 	User (String name, String phone, String address, String city, String zip, String state, int birthday, int pin) {
-		int space = name.indexOf(',');
 		this.lname = name.substring(0, 20).trim();
 		this.fname = name.substring(20, 35).trim();
 		this.phone = phone.trim();

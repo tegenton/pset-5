@@ -52,8 +52,11 @@ public class Database {
 					bw.write(line);
 					bw.newLine();
 				}
+				else {
+					bw.write(account.getString());
+					bw.newLine();
+				}
 			}
-			bw.write(account.getString());
 		}
 		data.delete();
 		if (!tempFile.renameTo(data))
