@@ -196,8 +196,6 @@ public class ATM {
                     this.database.updateAccount(this.currentAccount);
                 }
                 catch (Exception e) {
-                    System.out.println("Error saving account\n");
-                    return false;
                 }
 				this.currentAccount = null;
 				return true;
