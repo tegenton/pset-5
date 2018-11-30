@@ -21,6 +21,7 @@ public class Database {
 
 	void createAccount(BankAccount account) throws IOException {
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(this.data.getAbsoluteFile(), true))){
+			bw.newLine();
 			bw.append(account.getString());
 		}
 	}
@@ -43,7 +44,7 @@ public class Database {
 
 	void updateAccount(BankAccount account) throws IOException {
 		tempFile = new File(data.getAbsolutePath() + ".tmp");
-		try (BufferedReader br = new BufferedReader(new FileReader(this.data));
+		try (BufferedReader br = new BufferedReader(new FileReader(this.data.getAbsoluteFile()));
 				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile.getAbsoluteFile(), false))) {
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -51,11 +52,8 @@ public class Database {
 					bw.write(line);
 					bw.newLine();
 				}
-				else {
-					bw.write(account.getString());
-					bw.newLine();
-				}
 			}
+			bw.write(account.getString());
 		}
 		data.delete();
 		if (!tempFile.renameTo(data))
@@ -83,8 +81,8 @@ public class Database {
 			String line;
 			long max = 100000000;
 			while ((line = br.readLine()) != null) {
-				if (Long.parseLong(line.substring(0, 13)) > max) {
-					max = Long.parseLong(line.substring(0, 13));
+				if (Long.parseLong(line.substring(0, 9)) > max) {
+					max = Long.parseLong(line.substring(0, 9));
 				}
 			}
 			return max;

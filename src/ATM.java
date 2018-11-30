@@ -172,6 +172,7 @@ public class ATM {
 				break;
 			case '5':
 				this.currentAccount.getUser().printInfo();
+				System.out.println("Account number: " + this.currentAccount.getAccountNumber());
 				System.out.println("Press enter to continue");
 				in.nextLine();
 				break;
