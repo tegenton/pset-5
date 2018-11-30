@@ -54,6 +54,8 @@ public class User {
 			try {
 				System.out.print("Date of Birth (YYYYMMDD): ");
 				birthday = in.nextInt();
+				if (String.valueOf(birthday).length() != 8)
+					throw new InputMismatchException("Not properly formatted");
 				break;
 			} catch (InputMismatchException e) {
 				System.out.println("Invalid birth date");

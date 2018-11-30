@@ -19,7 +19,7 @@ public class BankAccount {
 	private char status = 'Y';
 
 	BankAccount(Database database) {
-		accountNum = database.accountNumber();
+		accountNum = database.accountNumber() + 1;
 	}
 
 	BankAccount(String info) {

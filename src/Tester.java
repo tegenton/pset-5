@@ -22,12 +22,7 @@ public class Tester {
 		 */
 
 		ATM atm;
-		try {
-			atm = new ATM(new File("C:\\Users\\tegenton\\Documents\\APCS\\pset-5\\accounts-db.txt"));
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			return;
-		}
+		atm = new ATM(new File("accounts-db.txt"));
 		while (atm.hasAccount()) {
 			atm.menu();
 			atm.loginScreen();

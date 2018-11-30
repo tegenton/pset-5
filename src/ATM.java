@@ -20,8 +20,12 @@ public class ATM {
 	private Database database;
 	private static Scanner in = new Scanner(System.in);
 
-	ATM(File data) throws IOException {
-		database = new Database(data);
+	ATM(File data) {
+		try {
+			database = new Database(data);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
 		new BankAccount(database);
 		while (!this.loginScreen());
 	}
