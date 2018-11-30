@@ -39,16 +39,29 @@ public class User {
 		fname = in.nextLine();
 		System.out.print("Last Name: ");
 		lname = in.nextLine();
-		System.out.print("Phone (##########): ");
-		phone = in.nextLine();
+		while (String.valueOf(phone).length() != 10 || String.valueOf(phone).charAt(0) == '0') {
+			System.out.print("Phone (10 digits): ");
+			phone = in.nextLine();
+			if (String.valueOf(phone).length() != 10 || String.valueOf(phone).charAt(0) == '0')
+				System.out.println("Invalid phone number");
+		}
 		System.out.print("Address: ");
 		address = in.nextLine();
 		System.out.print("City: ");
 		city = in.nextLine();
-		System.out.print("State: ");
-		state = in.nextLine();
-		System.out.print("Area Code: ");
-		zip = in.nextLine();
+		while (state.length() != 2) {
+			System.out.print("State: ");
+			state = in.nextLine();
+			if (state.length() != 2)
+				System.out.println("Invalid state");
+		}
+		String zip = null;
+		while (zip.length() != 5) {
+			System.out.println("Area code: ");
+			zip = in.nextLine();
+			if (zip.length() != 5)
+				System.out.println("Invalid area code");
+		}
 		while (true) {
 			try {
 				System.out.print("Date of Birth (YYYYMMDD): ");
@@ -74,8 +87,8 @@ public class User {
 		in.nextLine();
 	}
 
-	String getName() {
-		return (lname + "                    ").substring(0, 20) + (fname + "               ").substring(0, 15);
+	String getName(boolean whitespace) {
+		return (whitespace) ? (lname + "                    ").substring(0, 20) + (fname + "               ").substring(0, 15) : (lname + ", " + fname);
 	}
 
 	void setPhone(String phone) {
@@ -118,7 +131,7 @@ public class User {
 		System.out.println("What is your current PIN?");
 		if (this.checkPIN(in.nextInt())) {
 			System.out.println("Enter your new PIN");
-			pin = in.nextInt();
+			this.pin = in.nextInt();
 			in.nextLine();
 		}
 		else {
@@ -131,12 +144,12 @@ public class User {
 	}
 
 	public void printInfo() {
-		System.out.println("Name: " + this.getName());
-		System.out.println("Phone: " + this.getPhone());
-		System.out.println("Address: " + this.getAddress());
-		System.out.println("City: " + this.getCity());
-		System.out.println("State: " + this.getState());
-		System.out.println("Area Code: " + this.getZip());
+		System.out.println("Name: " + this.getName(false));
+		System.out.println("Phone: " + this.getPhone().trim());
+		System.out.println("Address: " + this.getAddress().trim());
+		System.out.println("City: " + this.getCity().trim());
+		System.out.println("State: " + this.getState().trim());
+		System.out.println("Area Code: " + this.getZip().trim());
 		System.out.println("Date of Birth (YYYYMMDD): " + this.getBirthday());
 	}
 
@@ -158,10 +171,20 @@ public class User {
 			String addr = in.nextLine();
 			System.out.println("What is your new city?");
 			String cit = in.nextLine();
-			System.out.println("What is your new state?");
-			String stat = in.nextLine();
-			System.out.println("What is your new area code?");
-			String zi = in.nextLine();
+			String stat = null;
+			while (stat.length() != 2) {
+				System.out.println("What is your new state?");
+				stat = in.nextLine();
+				if (stat.length() != 2)
+					System.out.println("Invalid state");
+			}
+			String zi = null;
+			while (zi.length() != 5) {
+				System.out.println("What is your new area code?");
+				zi = in.nextLine();
+				if (zi.length() != 5)
+					System.out.println("Invalid zip code");
+			}
 			
 			this.setAddress(addr, cit, stat, zi);
 			return true;

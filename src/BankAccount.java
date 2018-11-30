@@ -83,7 +83,7 @@ public class BankAccount {
 		String temp = String.format("%9d", accountNumber);
 		temp += String.format("%4d", accountHolder.getPIN());
 		temp += (String.format("%10.2f", balance).trim() + "               ").substring(0, 15);
-		temp += accountHolder.getName();
+		temp += accountHolder.getName(true);
 		temp += String.valueOf(accountHolder.getBirthday()).substring(0, 8);
 		temp += accountHolder.getPhone().substring(0,10);
 		temp += (accountHolder.getAddress() + "                              ").substring(0,30);

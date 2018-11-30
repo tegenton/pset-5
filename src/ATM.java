@@ -136,6 +136,7 @@ public class ATM {
 			case '3':
 				long accountNum;
 				try {
+					System.out.println("Enter the account number:");
 				    accountNum = in.nextLong();
 	            }
 				catch (InputMismatchException e) {
@@ -168,7 +169,7 @@ public class ATM {
 				in.nextLine();
 				break;
 			case '4':
-			    System.out.println("Current balance is: $" + currentAccount.getBalance());
+			    System.out.println("Current balance is: $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
 				break;
 			case '5':
 				this.currentAccount.getUser().printInfo();
@@ -178,6 +179,13 @@ public class ATM {
 				break;
 			case '6':
 				while (!this.currentAccount.getUser().updateInfo(in));
+				try {
+                    this.database.updateAccount(this.currentAccount);
+                }
+                catch (Exception e) {
+                    System.out.println("Error saving account\n");
+                    return false;
+                }
 				break;
 			case '7':
 				System.out.println("Closing account");
