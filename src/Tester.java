@@ -13,7 +13,7 @@ public class Tester {
 	 * @throws Exception 
 	 */
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		/*
 		 * Rather than hard coding one or more BankAccount objects, you'll need to read them in
@@ -21,8 +21,7 @@ public class Tester {
 		 * you'll need to update the database accordingly.
 		 */
 
-		ATM atm;
-		atm = new ATM(new File("accounts-db.txt"));
+		ATM atm = new ATM(new File("accounts-db.txt"));
 		while (atm.hasAccount()) {
 			atm.menu();
 			atm.loginScreen();

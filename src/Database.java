@@ -44,8 +44,9 @@ public class Database {
 
 	void updateAccount(BankAccount account) throws IOException {
 		tempFile = new File(data.getAbsolutePath() + ".tmp");
-		try (BufferedReader br = new BufferedReader(new FileReader(this.data.getAbsoluteFile()));
-				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile.getAbsoluteFile(), false))) {
+		tempFile.createNewFile();
+		try (BufferedReader br = new BufferedReader(new FileReader(this.data));
+				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile, false))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				if (!line.substring(0, 9).equals(account.getAccountNumber() + "")) {
@@ -61,7 +62,6 @@ public class Database {
 		data.delete();
 		if (!tempFile.renameTo(data))
 			System.out.println("Could not update database");
-		data = tempFile;
 	}
 
 	void deleteAccount(BankAccount account) throws IOException {

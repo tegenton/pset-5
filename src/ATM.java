@@ -92,11 +92,11 @@ public class ATM {
 		database.createAccount(this.currentAccount);
 	}
 
-	public void menu() {
+	public void menu() throws IOException {
 		while (!this.menu('a'));
 	}
 
-	private boolean menu(char a) {
+	private boolean menu(char a) throws IOException {
 		System.out.println("What would you like to do?\n" +
 				"1) Deposit funds\n" +
 				"2) Withdraw funds\n" +
@@ -184,7 +184,8 @@ public class ATM {
                 }
                 catch (Exception e) {
                     System.out.println("Error saving account\n");
-                    return false;
+                    throw e;
+//                    return false;
                 }
 				break;
 			case '7':
@@ -196,6 +197,7 @@ public class ATM {
                     this.database.updateAccount(this.currentAccount);
                 }
                 catch (Exception e) {
+                	throw e;
                 }
 				this.currentAccount = null;
 				return true;
