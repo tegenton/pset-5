@@ -45,6 +45,8 @@ public class BankAccount {
 	void deposit(double amount) {
 		if (amount <= 0)
 			throw new InvalidParameterException("Deposit amount is too low");
+		if (balance + amount > 999999999999.99)
+			throw new InvalidParameterException("Deposit amount is too high");
 		balance += amount;
 	}
 	void withdraw(double amount) {

@@ -42,26 +42,35 @@ public class Database {
 		}
 	}
 
-	void updateAccount(BankAccount account) throws IOException {
+	void updateAccount(BankAccount account) {
 		tempFile = new File(data.getAbsolutePath() + ".tmp");
-		tempFile.createNewFile();
+		try {
+			tempFile.createNewFile();
+		} catch (IOException e) {
+			System.out.println("Could not update account (Unable to create temporary storage file)");
+		}
 		try (BufferedReader br = new BufferedReader(new FileReader(this.data));
 				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile, false))) {
-			String line;
-			while ((line = br.readLine()) != null) {
+			String line = line = br.readLine();
+			if (line != null) do {
 				if (!line.substring(0, 9).equals(account.getAccountNumber() + "")) {
 					bw.write(line);
-					bw.newLine();
+					if ((line = br.readLine()) != null)
+						bw.newLine();
 				}
 				else {
 					bw.write(account.getString());
-					bw.newLine();
+					if ((line = br.readLine()) != null)
+						bw.newLine();
 				}
-			}
+			} while (line != null);
+		}
+		catch (IOException e) {
+			System.out.println("Could not update account (Error writing to file)");
 		}
 		data.delete();
 		if (!tempFile.renameTo(data))
-			System.out.println("Could not update database");
+			System.out.println("Could not update database (Error renaming file)");
 	}
 
 	void deleteAccount(BankAccount account) throws IOException {
@@ -72,11 +81,12 @@ public class Database {
 			while ((line = br.readLine()) != null) {
 				if (!line.substring(0, 13).equals(account.getAccountNumber() + "" + account.getUser().getPIN())) {
 					bw.write(line);
+					bw.newLine();
 				}
 			}
 		}
 		if (!tempFile.renameTo(data))
-			System.out.println("Could not delete account");
+			System.out.println("Could not delete account (Error renaming file)");
 	}
 
 	public long accountNumber() {

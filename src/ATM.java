@@ -20,11 +20,11 @@ public class ATM {
 	private Database database;
 	private static Scanner in = new Scanner(System.in);
 
-	ATM(File data) {
+	ATM(File data) throws IOException {
 		try {
 			database = new Database(data);
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			throw e;
 		}
 		new BankAccount(database);
 		while (!this.loginScreen());
@@ -92,11 +92,11 @@ public class ATM {
 		database.createAccount(this.currentAccount);
 	}
 
-	public void menu() throws IOException {
+	public void menu() {
 		while (!this.menu('a'));
 	}
 
-	private boolean menu(char a) throws IOException {
+	private boolean menu(char a) {
 		System.out.println("What would you like to do?\n" +
 				"1) Deposit funds\n" +
 				"2) Withdraw funds\n" +
@@ -106,104 +106,90 @@ public class ATM {
 				"6) Update personal information\n" +
 				"7) Close account\n" +
 				"8) Save Changes and Logout");
-		switch (in.nextLine().charAt(0)) {
-			case '1':
-				System.out.println("How much would you like to deposit?");
-				try {
-					this.currentAccount.deposit(in.nextDouble());
-				}
-				catch (InvalidParameterException e) {
-					System.out.println(e.getMessage());
-				}
-				catch (InputMismatchException e) {
-					System.out.println("Invalid amount");
-				}
-				in.nextLine();
-				break;
-			case '2':
-				System.out.println("How much would you like to withdraw?");
-				try {
-					this.currentAccount.withdraw(in.nextDouble());
-				}
-				catch (InvalidParameterException e) {
-					System.out.println(e.getMessage());
-				}
-				catch (InputMismatchException e) {
-					System.out.println("Invalid amount");
-				}
-				in.nextLine();
-				break;
-			case '3':
-				long accountNum;
-				try {
-					System.out.println("Enter the account number:");
-				    accountNum = in.nextLong();
-	            }
-				catch (InputMismatchException e) {
-				    System.out.println("Invalid account number");
-					in.nextLine();
-				    break;
-	            }
-				System.out.println("Enter your PIN:");
-				int pin;
-				try {
-				    pin = in.nextInt();
-	            }
-				catch (InputMismatchException e){
-	                System.out.println("Invalid pin");
+		try {
+			switch (in.nextLine().charAt(0)) {
+				case '1':
+					System.out.println("How much would you like to deposit?");
+					try {
+						this.currentAccount.deposit(in.nextDouble());
+					} catch (InvalidParameterException e) {
+						System.out.println(e.getMessage());
+					} catch (InputMismatchException e) {
+						System.out.println("Invalid amount");
+					}
 					in.nextLine();
 					break;
-	            }
-				try {
-					double amount = in.nextDouble();
+				case '2':
+					System.out.println("How much would you like to withdraw?");
 					try {
-						this.database.updateAccount(this.currentAccount.transfer(database.getAccount(accountNum, pin), amount));
-					}
-					catch (Exception e) {
+						this.currentAccount.withdraw(in.nextDouble());
+					} catch (InvalidParameterException e) {
 						System.out.println(e.getMessage());
+					} catch (InputMismatchException e) {
+						System.out.println("Invalid amount");
 					}
+					in.nextLine();
+					break;
+				case '3':
+					long accountNum;
+					try {
+						System.out.println("Enter the account number:");
+						accountNum = in.nextLong();
+					} catch (InputMismatchException e) {
+						System.out.println("Invalid account number");
+						in.nextLine();
+						break;
+					}
+					System.out.println("Enter your PIN:");
+					int pin;
+					try {
+						pin = in.nextInt();
+					} catch (InputMismatchException e) {
+						System.out.println("Invalid pin");
+						in.nextLine();
+						break;
+					}
+					try {
+						System.out.println("How much do you want to transfer?");
+						double amount = in.nextDouble();
+						try {
+							this.database.updateAccount(this.currentAccount.transfer(database.getAccount(accountNum, pin), amount));
+						} catch (Exception e) {
+							System.out.println(e.getMessage());
+						}
+					} catch (InputMismatchException e) {
+						System.out.println("Not a valid amount");
+					}
+					in.nextLine();
+					break;
+				case '4':
+					System.out.println("Current balance is: $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
+					break;
+				case '5':
+					this.currentAccount.getUser().printInfo();
+					System.out.println("Account number: " + this.currentAccount.getAccountNumber());
+					System.out.println("Press enter to continue");
+					in.nextLine();
+					break;
+				case '6':
+					while (!this.currentAccount.getUser().updateInfo(in)) ;
+					this.database.updateAccount(this.currentAccount);
+					break;
+				case '7':
+					System.out.println("Closing account");
+					this.currentAccount.close();
+				case '8':
+					System.out.println("Logging out");
+					this.database.updateAccount(this.currentAccount);
+					this.currentAccount = null;
+					return true;
+				default:
+					System.out.println("Invalid option");
+					break;
 				}
-				catch (InputMismatchException e) {
-					System.out.println("Not a valid amount");
-				}
-				in.nextLine();
-				break;
-			case '4':
-			    System.out.println("Current balance is: $" + String.format("%,10.2f", currentAccount.getBalance()).trim());
-				break;
-			case '5':
-				this.currentAccount.getUser().printInfo();
-				System.out.println("Account number: " + this.currentAccount.getAccountNumber());
-				System.out.println("Press enter to continue");
-				in.nextLine();
-				break;
-			case '6':
-				while (!this.currentAccount.getUser().updateInfo(in));
-				try {
-                    this.database.updateAccount(this.currentAccount);
-                }
-                catch (Exception e) {
-                    System.out.println("Error saving account\n");
-                    throw e;
-//                    return false;
-                }
-				break;
-			case '7':
-				System.out.println("Closing account");
-				this.currentAccount.close();
-			case '8':
-				System.out.println("Logging out");
-                try {
-                    this.database.updateAccount(this.currentAccount);
-                }
-                catch (Exception e) {
-                	throw e;
-                }
-				this.currentAccount = null;
-				return true;
-			default:
-				System.out.println("Invalid option");
-				break;
+			}
+		catch (StringIndexOutOfBoundsException e) {
+			System.out.println("Invalid option");
 		}
 		return false;
 	}

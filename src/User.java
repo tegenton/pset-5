@@ -12,13 +12,13 @@
 import java.util.*;
 
 public class User {
-	private String fname;
-	private String lname;
-	private String phone;
-	private String address;
-	private String city;
-	private String state;
-	private String zip;
+	private String fname = "";
+	private String lname = "";
+	private String phone = "";
+	private String address = "";
+	private String city = "";
+	private String state = "";
+	private String zip = "";
 	private int birthday;
 	private int pin;
 
@@ -55,36 +55,38 @@ public class User {
 			if (state.length() != 2)
 				System.out.println("Invalid state");
 		}
-		String zip = null;
 		while (zip.length() != 5) {
-			System.out.println("Area code: ");
+			System.out.print("Area code: ");
 			zip = in.nextLine();
 			if (zip.length() != 5)
 				System.out.println("Invalid area code");
 		}
-		while (true) {
+		while (String.valueOf(birthday).length() != 8) {
 			try {
 				System.out.print("Date of Birth (YYYYMMDD): ");
 				birthday = in.nextInt();
 				if (String.valueOf(birthday).length() != 8)
-					throw new InputMismatchException("Not properly formatted");
-				break;
+					System.out.println("Invalid birth date");
 			} catch (InputMismatchException e) {
 				System.out.println("Invalid birth date");
+			}
+			finally {
 				in.nextLine();
 			}
 		}
-		while (true) {
+		while (String.valueOf(pin).length() != 4) {
 			try {
 				System.out.print("PIN (4 digits): ");
 				pin = in.nextInt();
-				break;
+				if (String.valueOf(pin).length() != 4)
+					System.out.println("Invalid PIN");
 			} catch (InputMismatchException e) {
 				System.out.println("Invalid PIN");
+			}
+			finally {
 				in.nextLine();
 			}
 		}
-		in.nextLine();
 	}
 
 	String getName(boolean whitespace) {
