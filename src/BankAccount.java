@@ -24,13 +24,12 @@ public class BankAccount {
 
 	BankAccount(String info) {
 		int index = 0;
-				
 		this.accountNumber = Long.parseLong(info.substring(index, index += 9));
 		int pin = Integer.parseInt(info.substring(index, index += 4));
 		this.balance = Double.parseDouble(info.substring(index, index += 15));
 		String name = info.substring(index, index += 35);
 		int birthday = Integer.parseInt(info.substring(index, index += 8));
-		String phone = info.substring(index, index += 10);
+		long phone = Long.parseLong(info.substring(index, index += 10));
 		String address = info.substring(index, index += 30);
 		String city = info.substring(index, index += 30);
 		String state = info.substring(index, index += 2);
@@ -87,7 +86,7 @@ public class BankAccount {
 		temp += (String.format("%10.2f", balance).trim() + "               ").substring(0, 15);
 		temp += accountHolder.getName(true);
 		temp += String.valueOf(accountHolder.getBirthday()).substring(0, 8);
-		temp += accountHolder.getPhone().substring(0,10);
+		temp += String.format("%10d", accountHolder.getPhone()).substring(0,10);
 		temp += (accountHolder.getAddress() + "                              ").substring(0,30);
 		temp += (accountHolder.getCity() + "                              ").substring(0,30);
 		temp += (accountHolder.getState() + "  ").substring(0,2);

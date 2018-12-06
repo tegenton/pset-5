@@ -14,7 +14,7 @@ import java.util.*;
 public class User {
 	private String fname = "";
 	private String lname = "";
-	private String phone = "";
+	private long phone;
 	private String address = "";
 	private String city = "";
 	private String state = "";
@@ -22,10 +22,10 @@ public class User {
 	private int birthday;
 	private int pin;
 
-	User (String name, String phone, String address, String city, String zip, String state, int birthday, int pin) {
+	User (String name, long phone, String address, String city, String zip, String state, int birthday, int pin) {
 		this.lname = name.substring(0, 20).trim();
 		this.fname = name.substring(20, 35).trim();
-		this.phone = phone.trim();
+		this.phone = phone;
 		this.address = address.trim();
 		this.city = city.trim();
 		this.state = state.trim();
@@ -40,10 +40,17 @@ public class User {
 		System.out.print("Last Name: ");
 		lname = in.nextLine();
 		while (String.valueOf(phone).length() != 10 || String.valueOf(phone).charAt(0) == '0') {
-			System.out.print("Phone (10 digits): ");
-			phone = in.nextLine();
-			if (String.valueOf(phone).length() != 10 || String.valueOf(phone).charAt(0) == '0')
+			try {
+				System.out.print("Phone (10 digits): ");
+				phone = in.nextLong();
+				if (String.valueOf(phone).length() != 10 || String.valueOf(phone).charAt(0) == '0')
+					System.out.println("Invalid phone number");
+			} catch (InputMismatchException e) {
 				System.out.println("Invalid phone number");
+			}
+			finally {
+				in.nextLine();
+			}
 		}
 		System.out.print("Address: ");
 		address = in.nextLine();
@@ -93,10 +100,10 @@ public class User {
 		return (whitespace) ? (lname + "                    ").substring(0, 20) + (fname + "               ").substring(0, 15) : (lname + ", " + fname);
 	}
 
-	void setPhone(String phone) {
+	void setPhone(long phone) {
 		this.phone = phone;
 	}
-	String getPhone() {
+	long getPhone() {
 		return phone;
 	}
 
@@ -147,7 +154,7 @@ public class User {
 
 	public void printInfo() {
 		System.out.println("Name: " + this.getName(false));
-		System.out.println("Phone: " + this.getPhone().trim());
+		System.out.println("Phone: (" + String.valueOf(phone).substring(0, 3) + ")-" + String.valueOf(phone).substring(3, 6) + "-" + String.valueOf(phone).substring(6, 10));
 		System.out.println("Address: " + this.getAddress().trim());
 		System.out.println("City: " + this.getCity().trim());
 		System.out.println("State: " + this.getState().trim());
@@ -166,14 +173,20 @@ public class User {
 			return true;
 		case '2':
 			System.out.println("What is your new phone number? (##########)");
-			this.setPhone(in.nextLine().trim());
+			try {
+				this.setPhone(in.nextLong());
+			}
+			catch (InputMismatchException e) {
+				System.out.println("Invalid phone number");
+				return false;
+			}
 			return true;
 		case '3':
 			System.out.println("What is your new address?");
 			String addr = in.nextLine();
 			System.out.println("What is your new city?");
 			String cit = in.nextLine();
-			String stat = null;
+			String stat = "";
 			while (stat.length() != 2) {
 				System.out.println("What is your new state?");
 				stat = in.nextLine();

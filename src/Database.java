@@ -51,7 +51,7 @@ public class Database {
 		}
 		try (BufferedReader br = new BufferedReader(new FileReader(this.data));
 				BufferedWriter bw = new BufferedWriter(new FileWriter(this.tempFile, false))) {
-			String line = line = br.readLine();
+			String line = br.readLine();
 			if (line != null) do {
 				if (!line.substring(0, 9).equals(account.getAccountNumber() + "")) {
 					bw.write(line);
