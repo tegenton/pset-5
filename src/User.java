@@ -155,10 +155,7 @@ public class User {
 	public void printInfo() {
 		System.out.println("Name: " + this.getName(false));
 		System.out.println("Phone: (" + String.valueOf(phone).substring(0, 3) + ")-" + String.valueOf(phone).substring(3, 6) + "-" + String.valueOf(phone).substring(6, 10));
-		System.out.println("Address: " + this.getAddress().trim());
-		System.out.println("City: " + this.getCity().trim());
-		System.out.println("State: " + this.getState().trim());
-		System.out.println("Area Code: " + this.getZip().trim());
+		System.out.println("Address: " + this.getAddress().trim() + "\n" + this.getCity().trim() + ", " + this.getState().trim() + " "+ this.getZip().trim());
 		System.out.println("Date of Birth (YYYYMMDD): " + this.getBirthday());
 	}
 
